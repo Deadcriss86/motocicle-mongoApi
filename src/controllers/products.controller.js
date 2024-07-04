@@ -5,3 +5,5 @@ export const NewProduct = async (req, res) => {
     data: productData,
   });
 };
+
+export const GetProducts = async (req, res) => {};
