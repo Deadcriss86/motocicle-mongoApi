@@ -4,15 +4,19 @@ const taskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      require: true,
+      required: true,
     },
     description: {
       type: String,
-      require: true,
+      required: true,
     },
     date: {
-      type: date,
+      type: Date,
       default: Date.now,
+    },
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
     },
   },
   {
@@ -20,4 +24,4 @@ const taskSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("task", taskSchema);
+export default mongoose.model("Task", taskSchema);
