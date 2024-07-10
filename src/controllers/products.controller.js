@@ -1,10 +1,10 @@
-export const NewProduct = async (req, res) => {
-  const productData = req.body;
+import Product from "../models/products.model.js";
 
-  res.send({
-    message: "Si se pudo",
-    data: productData,
-  });
+export const GetProducts = async (req, res) => {
+  try {
+    const productsres = await Product.find();
+    res.status(200).json(productsres);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener los productos", error });
+  }
 };
-
-export const GetProducts = async (req, res) => {};

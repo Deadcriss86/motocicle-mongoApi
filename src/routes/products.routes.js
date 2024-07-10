@@ -2,6 +2,7 @@ import { Router } from "express";
 import { uploadToS3 } from "../controllers/upload.js";
 import multer from "multer";
 import Product from "../models/products.model.js";
+import { GetProducts } from "../controllers/products.controller.js";
 
 const router = Router();
 const upload = multer({ dest: "uploads/" });
@@ -15,7 +16,6 @@ router.post("/newproduct", upload.single("image"), async (req, res) => {
     const result = await uploadToS3(filePath, fileName);
 
     if (result.success) {
-      // Crear un nuevo producto con la URL de la imagen
       const newProduct = new Product({
         productName: name,
         price: price,
@@ -23,7 +23,7 @@ router.post("/newproduct", upload.single("image"), async (req, res) => {
         description: description,
         category: category,
         subcategory: subcategory,
-        images: result.location, // URL de la imagen subida a S3
+        images: result.location,
       });
 
       await newProduct.save();
@@ -43,5 +43,7 @@ router.post("/newproduct", upload.single("image"), async (req, res) => {
     });
   }
 });
+
+router.get("/getproducts", GetProducts);
 
 export default router;
