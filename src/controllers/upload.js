@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import fs from "fs";
 import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config();
 
@@ -10,12 +11,26 @@ const s3 = new AWS.S3({
 });
 
 export const uploadToS3 = async (filePath, fileName) => {
+  const ext = path.extname(fileName).toLowerCase();
+  let mimeType;
+  switch (ext) {
+    case ".jpg":
+    case ".jpeg":
+      mimeType = "image/jpeg";
+      break;
+    case ".png":
+      mimeType = "image/png";
+      break;
+    default:
+      mimeType = "application/octet-stream"; // valor por defecto
+  }
   const fileContent = fs.readFileSync(filePath);
   const params = {
     Bucket: "motoapiprueba2",
     Key: fileName,
     Body: fileContent,
     ACL: "public-read",
+    ContentType: mimeType,
   };
 
   try {
