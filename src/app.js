@@ -15,6 +15,11 @@ app.use(
     origin: FRONTEND_URL,
   })
 );
+import cors from "cors";
+
+const app = express();
+
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
@@ -22,5 +27,6 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", NewProduct);
+
 
 export default app;
