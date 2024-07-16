@@ -30,6 +30,8 @@ export const login = async (req, res) => {
       sameSite: "none",
     });
 
+    res.cookie("isadmin", userFound.isAdmin, { httpOnly: true, secure: true });
+
     res.json({
       id: userFound._id,
       username: userFound.username,

@@ -10,7 +10,26 @@ export const GetPedidos = async (req, res) => {
   }
 };
 
-export const EditPedidos = async (req, res, next) => {
+export const editPedido = async (req, res) => {
+  const { id } = req.params;
+  const { detalles_envio, numero_guia, status_producto } = req.body;
+
   try {
-  } catch (error) {}
+    const updatedPedido = await Pedido.findByIdAndUpdate(
+      id,
+      { detalles_envio, numero_guia, status_producto },
+      { new: true }
+    );
+
+    if (!updatedPedido) {
+      return res.status(404).json({ message: "Pedido no encontrado" });
+    }
+
+    res.json({
+      message: "Pedido actualizado con éxito",
+      pedido: updatedPedido,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar el pedido", error });
+  }
 };
