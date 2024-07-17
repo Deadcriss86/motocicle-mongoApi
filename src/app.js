@@ -15,10 +15,6 @@ app.use(
     origin: FRONTEND_URL,
   })
 );
-import cors from "cors";
-
-const app = express();
-
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
