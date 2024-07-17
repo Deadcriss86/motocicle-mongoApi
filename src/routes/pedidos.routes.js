@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { GetPedidos, editPedido } from "../controllers/pedidos.controller";
 import { authenticateToken } from "../middlewares/auth.middleware";
 import { isAdmin } from "../middlewares/isadmin.middleware";
+import { editPedido, GetPedidos } from "../controllers/pedidos.controller";
 
 const router = Router();
 router.get("/pedidos", GetPedidos);
