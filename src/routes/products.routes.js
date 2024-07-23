@@ -2,7 +2,10 @@ import { Router } from "express";
 import { uploadToS3 } from "../controllers/upload.js";
 import multer from "multer";
 import Product from "../models/products.model.js";
-import { GetProducts } from "../controllers/products.controller.js";
+import {
+  GetProducts,
+  GetProductById,
+} from "../controllers/products.controller.js";
 
 const router = Router();
 const upload = multer({ dest: "uploads/" });
@@ -45,5 +48,6 @@ router.post("/newproduct", upload.single("image"), async (req, res) => {
 });
 
 router.get("/getproducts", GetProducts);
+router.get("/getproduct", GetProductById);
 
 export default router;
