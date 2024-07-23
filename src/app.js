@@ -8,7 +8,6 @@ import NewProduct from "./routes/products.routes.js";
 import Pedidos from "./routes/pedidos.routes.js";
 import { FRONTEND_URL } from "./config.js";
 
-
 const app = express();
 
 app.use(
@@ -22,11 +21,9 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
 
-
 app.use("/api", Pedidos);
 app.use("/api/auth", authRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", NewProduct);
-
 
 export default app;
