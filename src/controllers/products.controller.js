@@ -11,8 +11,11 @@ export const GetProducts = async (req, res) => {
 
 export const GetProductById = async (req, res) => {
   try {
-    const productId = req.body.id;
+    const productId = req.query.id;
     const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
     res.status(200).json(product);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener el producto", error });
