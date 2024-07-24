@@ -16,6 +16,7 @@ const PedidoSchema = new mongoose.Schema({
   total: { type: Number, required: true },
   author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   username_author: { type: String },
+  pagado: { type: Boolean, default: false },
 });
 
 const Pedido = mongoose.model("Pedido", PedidoSchema);
