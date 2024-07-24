@@ -2,11 +2,11 @@ import Pedido from "../models/pedidos.model.js";
 
 export const GetPedido = async (req, res) => {
   try {
-    const id_product = req.body;
-    const pedido_res = await Pedido.findById(id_product);
-    res.status(200).json(pedido_res);
+    const authorId = req.user._id;
+    const pedidos = await Pedido.find({ author: authorId });
+    res.status(200).json(pedidos);
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener el pedido", error });
+    res.status(500).json({ message: "Error al obtener los pedidos", error });
   }
 };
 

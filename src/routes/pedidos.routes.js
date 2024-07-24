@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-router.get("/pedido", GetPedido);
+router.get("/pedido", authenticateToken, GetPedido);
 router.get("/pedidos", GetAllPedidos);
 router.put("/pedidos/:id", authenticateToken, isAdmin, editPedido);
 router.post("/newpedido", authenticateToken, NewPedido);
