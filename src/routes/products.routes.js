@@ -5,6 +5,7 @@ import Product from "../models/products.model.js";
 import {
   GetProducts,
   GetProductById,
+  addReview,
 } from "../controllers/products.controller.js";
 
 const router = Router();
@@ -49,5 +50,6 @@ router.post("/newproduct", upload.single("image"), async (req, res) => {
 
 router.get("/getproducts", GetProducts);
 router.get("/getproduct", GetProductById);
+router.post("/products/:productId/reviews", addReview);
 
 export default router;
