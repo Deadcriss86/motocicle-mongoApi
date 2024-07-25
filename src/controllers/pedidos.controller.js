@@ -57,7 +57,7 @@ export const NewPedido = async (req, res) => {
   }
 };
 
-const deletePedido = async (req, res) => {
+export const deletePedido = async (req, res) => {
   const { id } = req.params;
 
   try {
