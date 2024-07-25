@@ -24,7 +24,7 @@ export const GetProductById = async (req, res) => {
 
 export const addReview = async (req, res) => {
   const { productId } = req.params;
-  const { author, username, opinion, rating } = req.body;
+  const { opinion, rating } = req.body;
 
   try {
     const product = await Product.findById(productId);
@@ -34,8 +34,8 @@ export const addReview = async (req, res) => {
     }
 
     const newReview = {
-      author,
-      username,
+      author: req.user._id,
+      username: req.user.username,
       opinion,
       rating,
     };
