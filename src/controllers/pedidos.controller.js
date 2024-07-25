@@ -59,7 +59,7 @@ export const NewPedido = async (req, res) => {
 
 export const deletePedido = async (req, res) => {
   const { id } = req.params;
-
+  console.log("hola mundo");
   try {
     const pedido = await Pedido.findById(id);
 
