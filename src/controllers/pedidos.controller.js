@@ -56,3 +56,21 @@ export const NewPedido = async (req, res) => {
     res.status(500).json({ message: "Error al guardar el pedido", error });
   }
 };
+
+const deletePedido = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const pedido = await Pedido.findById(id);
+
+    if (!pedido) {
+      return res.status(404).json({ message: "Pedido no encontrado" });
+    }
+
+    await pedido.remove();
+    res.status(200).json({ message: "Pedido eliminado con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar el pedido:", error);
+    res.status(500).json({ message: "Error al eliminar el pedido" });
+  }
+};

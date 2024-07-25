@@ -6,6 +6,7 @@ import {
   GetPedido,
   GetAllPedidos,
   NewPedido,
+  deletePedido,
 } from "../controllers/pedidos.controller.js";
 
 const router = Router();
@@ -14,5 +15,6 @@ router.get("/pedido", authenticateToken, GetPedido);
 router.get("/pedidos", GetAllPedidos);
 router.put("/pedidos/:id", authenticateToken, isAdmin, editPedido);
 router.post("/newpedido", authenticateToken, NewPedido);
+router.delete("/pedido/:id", deletePedido);
 
 export default router;
