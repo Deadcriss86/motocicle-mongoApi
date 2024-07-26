@@ -77,6 +77,11 @@ export const login = async (req, res) => {
       sameSite: "none",
     });
 
+    res.cookie("isadmin", userFound.isAdmin || false, {
+      httpOnly: true,
+      secure: true,
+    });
+
     res.json({
       id: userFound._id,
       username: userFound.username,
@@ -112,4 +117,46 @@ export const logout = async (req, res) => {
     expires: new Date(0),
   });
   return res.sendStatus(200);
+};
+export const editUser = async (req, res) => {
+  try {
+    const { username, email } = req.body;
+    const { token } = req.cookies;
+
+    // Verificar si hay un token presente en las cookies
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Verificar y decodificar el token
+    jwt.verify(token, TOKEN_SECRET, async (error, user) => {
+      if (error) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      // Actualizar el usuario en la base de datos
+      try {
+        const updatedUser = await User.findByIdAndUpdate(
+          user.id,
+          { username, email },
+          { new: true }
+        );
+
+        if (!updatedUser) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        // Devolver los datos actualizados del usuario
+        return res.json({
+          id: updatedUser._id,
+          username: updatedUser.username,
+          email: updatedUser.email,
+        });
+      } catch (error) {
+        return res.status(500).json({ message: error.message });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
