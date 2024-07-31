@@ -118,9 +118,19 @@ export const logout = async (req, res) => {
   });
   return res.sendStatus(200);
 };
+
 export const editUser = async (req, res) => {
   try {
-    const { username, email } = req.body;
+    const {
+      nombre,
+      apellido,
+      nacionalidad,
+      celular,
+      cp,
+      calle,
+      delegacion,
+      referencias,
+    } = req.body;
     const { token } = req.cookies;
 
     // Verificar si hay un token presente en las cookies
@@ -134,11 +144,20 @@ export const editUser = async (req, res) => {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      // Actualizar el usuario en la base de datos
       try {
+        // Actualizar el usuario en la base de datos
         const updatedUser = await User.findByIdAndUpdate(
           user.id,
-          { username, email },
+          {
+            nombre,
+            apellido,
+            nacionalidad,
+            celular,
+            cp,
+            calle,
+            delegacion,
+            referencias,
+          },
           { new: true }
         );
 
@@ -149,8 +168,14 @@ export const editUser = async (req, res) => {
         // Devolver los datos actualizados del usuario
         return res.json({
           id: updatedUser._id,
-          username: updatedUser.username,
-          email: updatedUser.email,
+          nombre: updatedUser.nombre,
+          apellido: updatedUser.apellido,
+          nacionalidad: updatedUser.nacionalidad,
+          celular: updatedUser.celular,
+          cp: updatedUser.cp,
+          calle: updatedUser.calle,
+          delegacion: updatedUser.delegacion,
+          referencias: updatedUser.referencias,
         });
       } catch (error) {
         return res.status(500).json({ message: error.message });
