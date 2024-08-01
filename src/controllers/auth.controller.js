@@ -1,8 +1,8 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import { TOKEN_SECRET } from "../config.js";
 import { createAccessToken } from "../libs/jwt.js";
+import bcrypt from "bcryptjs";
 
 export const register = async (req, res) => {
   try {
@@ -11,27 +11,19 @@ export const register = async (req, res) => {
     const userFound = await User.findOne({ email });
 
     if (userFound)
-      return res.status(400).json({
-        message: ["The email is already in use"],
-      });
+      return res.status(400).json({ message: ["The email is already in use"] });
 
-    // hashing the password
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // creating the user
     const newUser = new User({
       username,
       email,
       password: passwordHash,
     });
 
-    // saving the user in the database
     const userSaved = await newUser.save();
 
-    // create access token
-    const token = await createAccessToken({
-      id: userSaved._id,
-    });
+    const token = await createAccessToken({ id: userSaved._id });
 
     res.cookie("token", token, {
       httpOnly: process.env.NODE_ENV !== "development",
@@ -55,21 +47,14 @@ export const login = async (req, res) => {
     const userFound = await User.findOne({ email });
 
     if (!userFound)
-      return res.status(400).json({
-        message: ["The email does not exist"],
-      });
+      return res.status(400).json({ message: ["The email does not exist"] });
 
     const isMatch = await bcrypt.compare(password, userFound.password);
     if (!isMatch) {
-      return res.status(400).json({
-        message: ["The password is incorrect"],
-      });
+      return res.status(400).json({ message: ["The password is incorrect"] });
     }
 
-    const token = await createAccessToken({
-      id: userFound._id,
-      username: userFound.username,
-    });
+    const token = await createAccessToken({ id: userFound._id });
 
     res.cookie("token", token, {
       httpOnly: process.env.NODE_ENV !== "development",
@@ -152,8 +137,9 @@ export const editUser = async (req, res) => {
             calle,
             delegacion,
             referencias,
+            updatedAt: new Date(), // Actualiza la fecha de actualización
           },
-          { new: true }
+          { new: true } // Devuelve el documento actualizado
         );
 
         if (!updatedUser) {
