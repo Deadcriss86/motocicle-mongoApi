@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const reviewSchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Suponiendo que tienes un modelo de usuario definido
+    ref: "User",
     required: true,
   },
   username: {
@@ -22,6 +22,21 @@ const reviewSchema = new mongoose.Schema({
   },
 });
 
+const questionSchema = new mongoose.Schema({
+  body: {
+    type: String,
+    required: true,
+  },
+  author: {
+    type: String,
+    required: true,
+  },
+  response: {
+    type: String,
+    required: false,
+  },
+});
+
 const productSchema = new mongoose.Schema({
   category: String,
   subcategory: String,
@@ -32,7 +47,11 @@ const productSchema = new mongoose.Schema({
   description: String,
   reviews: {
     type: [reviewSchema],
-    default: [], // No es obligatorio, por defecto es un array vacío
+    default: [],
+  },
+  questions: {
+    type: [questionSchema],
+    default: [],
   },
 });
 
