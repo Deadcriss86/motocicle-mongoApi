@@ -50,3 +50,28 @@ export const addReview = async (req, res) => {
     res.status(500).json({ message: "Error al agregar la reseña", error });
   }
 };
+
+export const addquestion = async (req, res) => {
+  const { productId } = req.params;
+  const { body } = req.body;
+
+  try {
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+
+    const newquestion = {
+      author: req.user.username,
+      body,
+    };
+
+    product.questions.push(newquestion);
+    await product.save();
+
+    res.status(200).json({ message: "Pregunta añadida con éxito" });
+  } catch (error) {
+    console.error("Error al agregar la pregunta:", error);
+    res.status(500).json({ message: "Error al agregar la pregunta", error });
+  }
+};
