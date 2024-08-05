@@ -79,12 +79,10 @@ export const login = async (req, res) => {
 
     if (userFound.isAdmin == true) {
       res.cookie("isadmin", userFound.isAdmin, {
-        httpOnly: true,
+        sameSite: true,
         secure: true,
       });
     }
-
-    console.log(userFound.isAdmin);
 
     res.json({
       id: userFound._id,
@@ -120,9 +118,20 @@ export const logout = async (req, res) => {
     httpOnly: true,
     secure: true,
     expires: new Date(0),
+    sameSite: "none",
   });
-  return res.sendStatus(200);
+
+  if (req.cookies.isadmin) {
+    res.cookie("isadmin", "", {
+      secure: true,
+      expires: new Date(0),
+      sameSite: "none",
+    });
+  }
+
+  return res.status(200).json({ message: "Logged out successfully" });
 };
+
 export const editUser = async (req, res) => {
   try {
     const { username, email } = req.body;
