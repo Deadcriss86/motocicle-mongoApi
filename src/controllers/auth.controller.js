@@ -77,15 +77,20 @@ export const login = async (req, res) => {
       sameSite: "none",
     });
 
-    res.cookie("isadmin", userFound.isAdmin || false, {
-      httpOnly: true,
-      secure: true,
-    });
+    if (userFound.isAdmin == true) {
+      res.cookie("isadmin", userFound.isAdmin, {
+        httpOnly: true,
+        secure: true,
+      });
+    }
+
+    console.log(userFound.isAdmin);
 
     res.json({
       id: userFound._id,
       username: userFound.username,
       email: userFound.email,
+      ...(userFound.isAdmin !== undefined && { isAdmin: userFound.isAdmin }),
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
