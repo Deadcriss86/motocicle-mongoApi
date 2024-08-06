@@ -61,11 +61,18 @@ export const login = async (req, res) => {
       secure: true,
       sameSite: "none",
     });
+    if (userFound.isAdmin == true) {
+      res.cookie("isadmin", userFound.isAdmin, {
+        sameSite: true,
+        secure: true,
+      });
+    }
 
     res.json({
       id: userFound._id,
       username: userFound.username,
       email: userFound.email,
+      ...(userFound.isAdmin !== undefined && { isAdmin: userFound.isAdmin }),
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -95,8 +102,18 @@ export const logout = async (req, res) => {
     httpOnly: true,
     secure: true,
     expires: new Date(0),
+    sameSite: "none",
   });
-  return res.sendStatus(200);
+
+  if (req.cookies.isadmin) {
+    res.cookie("isadmin", "", {
+      secure: true,
+      expires: new Date(0),
+      sameSite: "none",
+    });
+  }
+
+  return res.status(200).json({ message: "Logged out successfully" });
 };
 
 export const editUser = async (req, res) => {

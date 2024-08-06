@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema({
   referencias: { type: String },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  isAdmin:{ type: Boolean,
+      default: false,}
 });
 
 // Asegúrate de exportar el modelo

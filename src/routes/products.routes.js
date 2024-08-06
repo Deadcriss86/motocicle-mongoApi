@@ -6,6 +6,7 @@ import {
   GetProducts,
   GetProductById,
   addReview,
+  addquestion,
 } from "../controllers/products.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
 
@@ -51,6 +52,7 @@ router.post("/newproduct", upload.single("image"), async (req, res) => {
 
 router.get("/getproducts", GetProducts);
 router.get("/getproduct", GetProductById);
-router.post("/products/:productId/reviews", auth, addReview);
+router.post("/products/:productId/reviews", authenticateToken, addReview);
+router.post("/products/:productId/questions", authenticateToken, addquestion);
 
 export default router;
