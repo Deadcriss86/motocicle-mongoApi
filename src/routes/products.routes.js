@@ -52,7 +52,7 @@ router.post("/newproduct", upload.single("image"), async (req, res) => {
 
 router.get("/getproducts", GetProducts);
 router.get("/getproduct", GetProductById);
-router.post("/products/:productId/reviews", authenticateToken, addReview);
-router.post("/products/:productId/questions", authenticateToken, addquestion);
+router.post("/products/:productId/reviews", auth, addReview);
+router.post("/products/:productId/questions", auth, addquestion);
 
 export default router;
