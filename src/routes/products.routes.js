@@ -8,7 +8,7 @@ import {
   addReview,
   addquestion,
 } from "../controllers/products.controller.js";
-import { authenticateToken } from "../middlewares/auth.middleware.js";
+import { auth } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 const upload = multer({ dest: "uploads/" });
