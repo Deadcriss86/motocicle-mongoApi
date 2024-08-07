@@ -7,6 +7,8 @@ import {
   GetProductById,
   addReview,
   addquestion,
+  updateProductById,
+  deleteProductById,
 } from "../controllers/products.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
 
@@ -54,5 +56,7 @@ router.get("/getproducts", GetProducts);
 router.get("/getproduct", GetProductById);
 router.post("/products/:productId/reviews", auth, addReview);
 router.post("/products/:productId/questions", auth, addquestion);
+router.put("/products/:id", updateProductById);
+router.delete("/products/:id", deleteProductById);
 
 export default router;
