@@ -7,6 +7,7 @@ import taskRoutes from "./routes/tasks.routes.js";
 import productosRoutes from "./routes/products.routes.js";
 import Pedidos from "./routes/pedidos.routes.js";
 import { FRONTEND_URL } from "./config.js";
+import { mercadopago } from "./libs/mercadopago.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/api", Pedidos);
 app.use("/api/auth", authRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", productosRoutes);
+app.use("/compra", mercadopago);
 
 if (process.env.NODE_ENV === "production") {
   const path = await import("path");

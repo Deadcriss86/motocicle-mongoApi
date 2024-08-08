@@ -1,23 +1,25 @@
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
+import User from "../models/user.model.js";
 
-export const auth = (req, res, next) => {
+export const auth = async (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token no proporcionado" });
+  }
+
   try {
-    const { token } = req.cookies;
+    const decoded = jwt.verify(token, TOKEN_SECRET);
+    const user = await User.findById(decoded.id);
 
-    if (!token)
-      return res
-        .status(401)
-        .json({ message: "No token, authorization denied" });
+    if (!user) {
+      return res.status(401).json({ message: "Usuario no encontrado" });
+    }
 
-    jwt.verify(token, TOKEN_SECRET, (error, user) => {
-      if (error) {
-        return res.status(401).json({ message: "Token is not valid" });
-      }
-      req.user = user;
-      next();
-    });
+    req.user = user;
+    next();
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(401).json({ message: "Token inválido" });
   }
 };
