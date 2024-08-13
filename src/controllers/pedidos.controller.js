@@ -54,6 +54,7 @@ export const NewPedido = async (req, res) => {
     res.status(201).json(pedidosave);
   } catch (error) {
     res.status(500).json({ message: "Error al guardar el pedido", error });
+    console.log(error);
   }
 };
 
