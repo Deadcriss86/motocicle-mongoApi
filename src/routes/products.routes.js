@@ -6,8 +6,11 @@ import {
   GetProducts,
   GetProductById,
   addReview,
+  addquestion,
+  updateProductById,
+  deleteProductById,
 } from "../controllers/products.controller.js";
-import { authenticateToken } from "../middlewares/auth.middleware.js";
+import { auth } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 const upload = multer({ dest: "uploads/" });
@@ -51,6 +54,9 @@ router.post("/newproduct", upload.single("image"), async (req, res) => {
 
 router.get("/getproducts", GetProducts);
 router.get("/getproduct", GetProductById);
-router.post("/products/:productId/reviews", authenticateToken, addReview);
+router.post("/products/:productId/reviews", auth, addReview);
+router.post("/products/:productId/questions", auth, addquestion);
+router.put("/products/:id", updateProductById);
+router.delete("/products/:id", deleteProductById);
 
 export default router;

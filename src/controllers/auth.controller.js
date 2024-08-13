@@ -1,8 +1,8 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import { TOKEN_SECRET } from "../config.js";
 import { createAccessToken } from "../libs/jwt.js";
+import bcrypt from "bcryptjs";
 
 export const register = async (req, res) => {
   try {
@@ -11,27 +11,19 @@ export const register = async (req, res) => {
     const userFound = await User.findOne({ email });
 
     if (userFound)
-      return res.status(400).json({
-        message: ["The email is already in use"],
-      });
+      return res.status(400).json({ message: ["The email is already in use"] });
 
-    // hashing the password
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // creating the user
     const newUser = new User({
       username,
       email,
       password: passwordHash,
     });
 
-    // saving the user in the database
     const userSaved = await newUser.save();
 
-    // create access token
-    const token = await createAccessToken({
-      id: userSaved._id,
-    });
+    const token = await createAccessToken({ id: userSaved._id });
 
     res.cookie("token", token, {
       httpOnly: process.env.NODE_ENV !== "development",
@@ -55,37 +47,32 @@ export const login = async (req, res) => {
     const userFound = await User.findOne({ email });
 
     if (!userFound)
-      return res.status(400).json({
-        message: ["The email does not exist"],
-      });
+      return res.status(400).json({ message: ["The email does not exist"] });
 
     const isMatch = await bcrypt.compare(password, userFound.password);
     if (!isMatch) {
-      return res.status(400).json({
-        message: ["The password is incorrect"],
-      });
+      return res.status(400).json({ message: ["The password is incorrect"] });
     }
 
-    const token = await createAccessToken({
-      id: userFound._id,
-      username: userFound.username,
-    });
+    const token = await createAccessToken({ id: userFound._id });
 
     res.cookie("token", token, {
       httpOnly: process.env.NODE_ENV !== "development",
       secure: true,
       sameSite: "none",
     });
-
-    res.cookie("isadmin", userFound.isAdmin || false, {
-      httpOnly: true,
-      secure: true,
-    });
+    if (userFound.isAdmin == true) {
+      res.cookie("isadmin", userFound.isAdmin, {
+        sameSite: true,
+        secure: true,
+      });
+    }
 
     res.json({
       id: userFound._id,
       username: userFound.username,
       email: userFound.email,
+      ...(userFound.isAdmin !== undefined && { isAdmin: userFound.isAdmin }),
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -115,12 +102,32 @@ export const logout = async (req, res) => {
     httpOnly: true,
     secure: true,
     expires: new Date(0),
+    sameSite: "none",
   });
-  return res.sendStatus(200);
+
+  if (req.cookies.isadmin) {
+    res.cookie("isadmin", "", {
+      secure: true,
+      expires: new Date(0),
+      sameSite: "none",
+    });
+  }
+
+  return res.status(200).json({ message: "Logged out successfully" });
 };
+
 export const editUser = async (req, res) => {
   try {
-    const { username, email } = req.body;
+    const {
+      nombre,
+      apellido,
+      nacionalidad,
+      celular,
+      cp,
+      calle,
+      delegacion,
+      referencias,
+    } = req.body;
     const { token } = req.cookies;
 
     // Verificar si hay un token presente en las cookies
@@ -134,12 +141,22 @@ export const editUser = async (req, res) => {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      // Actualizar el usuario en la base de datos
       try {
+        // Actualizar el usuario en la base de datos
         const updatedUser = await User.findByIdAndUpdate(
           user.id,
-          { username, email },
-          { new: true }
+          {
+            nombre,
+            apellido,
+            nacionalidad,
+            celular,
+            cp,
+            calle,
+            delegacion,
+            referencias,
+            updatedAt: new Date(), // Actualiza la fecha de actualización
+          },
+          { new: true } // Devuelve el documento actualizado
         );
 
         if (!updatedUser) {
@@ -149,8 +166,14 @@ export const editUser = async (req, res) => {
         // Devolver los datos actualizados del usuario
         return res.json({
           id: updatedUser._id,
-          username: updatedUser.username,
-          email: updatedUser.email,
+          nombre: updatedUser.nombre,
+          apellido: updatedUser.apellido,
+          nacionalidad: updatedUser.nacionalidad,
+          celular: updatedUser.celular,
+          cp: updatedUser.cp,
+          calle: updatedUser.calle,
+          delegacion: updatedUser.delegacion,
+          referencias: updatedUser.referencias,
         });
       } catch (error) {
         return res.status(500).json({ message: error.message });

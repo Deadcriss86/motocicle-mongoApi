@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticateToken } from "../middlewares/auth.middleware.js";
+import { auth } from "../middlewares/auth.middleware.js";
 import { isAdmin } from "../middlewares/isadmin.middleware.js";
 import {
   editPedido,
@@ -11,10 +11,10 @@ import {
 
 const router = Router();
 
-router.get("/pedido", authenticateToken, GetPedido);
+router.get("/pedido", auth, GetPedido);
 router.get("/pedidos", GetAllPedidos);
-router.put("/pedidos/:id", authenticateToken, isAdmin, editPedido);
-router.post("/newpedido", authenticateToken, NewPedido);
+router.put("/pedidos/:id", auth, isAdmin, editPedido);
+router.post("/newpedido", auth, NewPedido);
 router.delete("/pedido/:id", deletePedido);
 
 export default router;
