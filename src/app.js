@@ -3,7 +3,6 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
-import taskRoutes from "./routes/tasks.routes.js";
 import productosRoutes from "./routes/products.routes.js";
 import Pedidos from "./routes/pedidos.routes.js";
 import { FRONTEND_URL } from "./config.js";
@@ -24,7 +23,6 @@ app.use(cookieParser());
 
 app.use("/api", Pedidos);
 app.use("/api/auth", authRoutes);
-app.use("/api", taskRoutes);
 app.use("/api", productosRoutes);
 app.use("/compra", mercadopago);
 
