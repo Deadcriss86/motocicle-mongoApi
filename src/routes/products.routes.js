@@ -17,6 +17,13 @@ const upload = multer({ dest: "uploads/" });
 
 router.post("/newproduct", upload.single("image"), async (req, res) => {
   const { name, price, stock, description, category, subcategory } = req.body;
+
+  if (!req.file) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Archivo no proporcionado" });
+  }
+
   const filePath = req.file.path;
   const fileName = req.file.originalname;
 
