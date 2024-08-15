@@ -116,6 +116,49 @@ export const logout = async (req, res) => {
   return res.status(200).json({ message: "Logged out successfully" });
 };
 
+export const getUserProfile = async (req, res) => {
+  try {
+    const { token } = req.cookies;
+
+    // Verificar si el token existe
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Verificar y decodificar el token
+    jwt.verify(token, TOKEN_SECRET, async (error, user) => {
+      if (error) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      try {
+        // Obtener el usuario de la base de datos
+        const userFound = await User.findById(user.id);
+        if (!userFound) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        // Devolver los datos del usuario
+        return res.json({
+          id: userFound._id,
+          nombre: userFound.nombre,
+          apellido: userFound.apellido,
+          nacionalidad: userFound.nacionalidad,
+          movil: userFound.celular,
+          cp: userFound.cp,
+          calle: userFound.calle,
+          delegacion: userFound.delegacion,
+          referencias: userFound.referencias,
+        });
+      } catch (error) {
+        return res.status(500).json({ message: error.message });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const editUser = async (req, res) => {
   try {
     const {
