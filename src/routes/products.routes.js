@@ -9,6 +9,7 @@ import {
   addquestion,
   updateProductById,
   deleteProductById,
+  addResponse,
 } from "../controllers/products.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
 
@@ -63,6 +64,11 @@ router.get("/getproducts", GetProducts);
 router.get("/getproduct", GetProductById);
 router.post("/products/:productId/reviews", auth, addReview);
 router.post("/products/:productId/questions", auth, addquestion);
+router.post(
+  "/products/:productId/questions/:questionId/response",
+  auth,
+  addResponse
+);
 router.put("/products/:id", updateProductById);
 router.delete("/products/:id", deleteProductById);
 
