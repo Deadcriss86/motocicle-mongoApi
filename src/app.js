@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use("/api", Pedidos);
 app.use("/api/auth", authRoutes);
 app.use("/api", productosRoutes);
-app.use("/compra", pasarela);
+app.use("/api", pasarela);
 
 if (process.env.NODE_ENV === "production") {
   const path = await import("path");
