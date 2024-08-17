@@ -1,40 +1,33 @@
-import { response } from "express";
-import { MercadoPagoConfig, Preference } from "mercadopago";
+import { Router } from "express";
+import dotenv from "dotenv";
+import Stripe from "stripe";
 
-export const mercadopago = async (req, res) => {
-  const client = new MercadoPagoConfig({
-    accessToken:
-      "APP_USR-2285472781265467-080715-9e0b889824a3d4e398e54df42ef4501c-1933439525",
+dotenv.config();
+const router = Router();
+const stripe = new Stripe(process.env.Stripe_secret_key);
+
+const calculateOrderAmount = (items) => {
+  let total = 0;
+  items.forEach((item) => {
+    total += item.amount;
   });
-  const preference = new Preference(client);
-
-  preference
-    .create({
-      body: {
-        payment_methods: {
-          excluded_payment_methods: [
-            {
-              id: "amex",
-            },
-            {
-              id: "redcompra",
-            },
-          ],
-          excluded_payment_types: [],
-          installments: 1,
-        },
-        back_urls: {
-          success: "http://localhost:3000/",
-        },
-        items: [
-          {
-            title: "My product",
-            quantity: 1,
-            unit_price: 2000,
-          },
-        ],
-      },
-    })
-    .then(console.log)
-    .catch(console.log);
+  return Math.round(total * 100); // Convertir a centavos
 };
+
+router.post("/create-payment-intent", async (req, res) => {
+  try {
+    const { items } = req.body;
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: calculateOrderAmount(items.items),
+      currency: "mxn",
+      automatic_payment_methods: { enabled: true },
+      metadata: { items: JSON.stringify(items) },
+    });
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error(error);
+    res.status(500);
+  }
+});
+
+export default router;
