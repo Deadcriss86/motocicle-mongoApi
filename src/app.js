@@ -7,6 +7,7 @@ import productosRoutes from "./routes/products.routes.js";
 import Pedidos from "./routes/pedidos.routes.js";
 import { FRONTEND_URL } from "./config.js";
 import pasarela from "./libs/mercadopago.js";
+import webhook from "./libs/webhook.js";
 
 const app = express();
 
@@ -18,8 +19,9 @@ app.use(
 );
 
 app.use(morgan("dev"));
-app.use(express.json());
 app.use(cookieParser());
+app.use("/api", webhook);
+app.use(express.json());
 
 app.use("/api", Pedidos);
 app.use("/api/auth", authRoutes);
