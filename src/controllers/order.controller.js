@@ -42,3 +42,17 @@ export const UpdateOrderById = async (req, res) => {
     res.status(500).json({ message: "Error al actualizar la orden", error });
   }
 };
+
+//Obtener orden por autor
+export const GetOrderByAuthor = async (req, res) => {
+  try {
+    const { authorId } = req.user._id;
+    const order = await Pedido.find({ author: authorId });
+    if (!order) {
+      return res.status(404).json({ message: "Orden no encontrada" });
+    }
+    res.status(200).json(order);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener la orden", error });
+  }
+};

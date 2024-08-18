@@ -14,6 +14,8 @@ const OrderSchema = new mongoose.Schema({
     default: Date.now,
   },
   numero_guia: { type: String },
+  paqueteria: { type: String },
+  fecha_de_envio: { type: Date },
   total: { type: Number },
   author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   username_author: { type: String },
