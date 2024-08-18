@@ -27,11 +27,11 @@ export const GetOrderById = async (req, res) => {
 // Editar una orden por ID
 export const UpdateOrderById = async (req, res) => {
   const { id } = req.params;
-  const { items, numero_guia, total } = req.body;
+  const { items, numero_guia, total, paqueteria, fecha_de_envio } = req.body;
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
-      { items, numero_guia, total },
+      { items, numero_guia, total, paqueteria, fecha_de_envio },
       { new: true } // Esto devuelve la orden actualizada
     );
     if (!updatedOrder) {

@@ -144,7 +144,7 @@ export const getUserProfile = async (req, res) => {
           nombre: userFound.nombre,
           apellido: userFound.apellido,
           nacionalidad: userFound.nacionalidad,
-          movil: userFound.celular,
+          celular: userFound.celular,
           cp: userFound.cp,
           ciudad: userFound.ciudad,
           calle: userFound.calle,
