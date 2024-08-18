@@ -66,4 +66,5 @@ export const cookies_test = async (req, res) => {
     secure: true,
     sameSite: "none",
   });
+  res.send("Llamada ejecutada");
 };
