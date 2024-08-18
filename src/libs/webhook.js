@@ -1,4 +1,5 @@
 import { Router } from "express";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Stripe from "stripe";
 import express from "express";
@@ -31,14 +32,15 @@ router.post(
         const paymentIntentSucceeded = event.data.object;
         console.log("Tienes un nuevo pedido!", paymentIntentSucceeded.metadata);
         const data = JSON.parse(paymentIntentSucceeded.metadata.items);
+        const userId = paymentIntentSucceeded.metadata.userId;
 
         try {
           const newOrder = new Order({
             orderId: data.orderId,
             items: data.items,
             total: data.total,
-            author: "66b04c0aeaea00ec0f60a3ee",
-            username_author: data.username_author,
+            author: new mongoose.Types.ObjectId(userId),
+            username_author: paymentIntentSucceeded.metadata.username,
           });
 
           await newOrder.save();
