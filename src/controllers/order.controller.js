@@ -59,3 +59,11 @@ export const GetOrderByAuthor = async (req, res) => {
     res.status(500).json({ message: "Error al obtener la orden", error });
   }
 };
+
+export const cookies_test = async (req, res) => {
+  res.cookie("token_test", "Esta es una cookie de prueba", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+};
