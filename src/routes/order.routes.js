@@ -12,6 +12,6 @@ const router = Router();
 router.get("/orders", GetAllOrders); // Obtener todas las órdenes
 router.get("/orders/:id", GetOrderById); // Obtener una orden por ID
 router.put("/orders/:id", UpdateOrderById); // Editar una orden por ID
-router.get("orders/find", auth, GetOrderByAuthor); //Buscar por autor
+router.get("/order/find", auth, GetOrderByAuthor); //Buscar por autor
 
 export default router;
