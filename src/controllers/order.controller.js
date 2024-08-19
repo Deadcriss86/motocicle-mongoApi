@@ -65,6 +65,7 @@ export const cookies_test = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
+    domain: "https://motoapp2despliegue.vercel.app",
   });
   res.send("Llamada ejecutada");
 };
