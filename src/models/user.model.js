@@ -9,13 +9,13 @@ const userSchema = new mongoose.Schema({
   nacionalidad: { type: String },
   celular: { type: String },
   cp: { type: String },
+  ciudad: { type: String },
   calle: { type: String },
   delegacion: { type: String },
   referencias: { type: String },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
-  isAdmin:{ type: Boolean,
-      default: false,}
+  isAdmin: { type: Boolean, default: false },
 });
 
 // Asegúrate de exportar el modelo

@@ -1,4 +1,5 @@
 import Product from "../models/products.model.js";
+import mongoose from "mongoose";
 
 export const GetProducts = async (req, res) => {
   try {
@@ -73,6 +74,58 @@ export const addquestion = async (req, res) => {
   } catch (error) {
     console.error("Error al agregar la pregunta:", error);
     res.status(500).json({ message: "Error al agregar la pregunta", error });
+  }
+};
+
+export const addResponse = async (req, res) => {
+  const { productId, questionId } = req.params;
+  const { response } = req.body;
+
+  // Validar parámetros de entrada
+  if (!productId || !questionId) {
+    return res
+      .status(400)
+      .json({ message: "ID de producto o pregunta no proporcionados" });
+  }
+
+  // Validar formato de ObjectId
+  if (
+    !mongoose.Types.ObjectId.isValid(productId) ||
+    !mongoose.Types.ObjectId.isValid(questionId)
+  ) {
+    return res
+      .status(400)
+      .json({ message: "IDs proporcionados no son válidos" });
+  }
+
+  if (!response) {
+    return res.status(400).json({ message: "Respuesta no proporcionada" });
+  }
+
+  try {
+    // Buscar el producto por ID
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+
+    // Buscar la pregunta dentro del producto
+    const question = product.questions.id(questionId);
+    if (!question) {
+      return res.status(404).json({ message: "Pregunta no encontrada" });
+    }
+
+    // Asignar la respuesta a la pregunta
+    question.response = response;
+
+    // Guardar los cambios en el producto
+    await product.save();
+
+    // Responder con éxito
+    res.status(200).json({ message: "Respuesta añadida con éxito" });
+  } catch (error) {
+    console.error("Error al agregar la respuesta:", error);
+    res.status(500).json({ message: "Error al agregar la respuesta", error });
   }
 };
 
