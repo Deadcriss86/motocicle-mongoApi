@@ -158,7 +158,7 @@ export const updateProductById = async (req, res) => {
 // Actualizar la cantidad de stock después de una compra exitosa
 export const reduceProductStock = async (req, res) => {
   const { id } = req.params;
-  const { cantidadComprada } = req.body;
+  const { quantity } = req.body;
 
   try {
     const product = await Product.findById(id);
@@ -166,7 +166,17 @@ export const reduceProductStock = async (req, res) => {
       return res.status(404).json({ message: "Producto no encontrado" });
     }
 
-    product.stock -= cantidadComprada;
+    // Convertir quantity a número
+    const cantidadCompradaNumber = parseInt(quantity, 10);
+
+    // Verificar si quantity es un número válido
+    if (isNaN(cantidadCompradaNumber)) {
+      return res
+        .status(400)
+        .json({ message: "Cantidad comprada no es válida" });
+    }
+
+    product.stock -= cantidadCompradaNumber;
 
     if (product.stock < 0) {
       return res.status(400).json({ message: "Stock insuficiente" });
