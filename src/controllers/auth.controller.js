@@ -152,6 +152,7 @@ export const getUserProfile = async (req, res) => {
           calle: userFound.calle,
           delegacion: userFound.delegacion,
           referencias: userFound.referencias,
+          avatar: userFound.avatar,
         });
       } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -174,22 +175,20 @@ export const editUser = async (req, res) => {
       calle,
       delegacion,
       referencias,
+      avatar, // Agrega el campo avatar aquí
     } = req.body;
     const { token } = req.cookies;
 
-    // Verificar si hay un token presente en las cookies
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Verificar y decodificar el token
     jwt.verify(token, TOKEN_SECRET, async (error, user) => {
       if (error) {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
       try {
-        // Actualizar el usuario en la base de datos
         const updatedUser = await User.findByIdAndUpdate(
           user.id,
           {
@@ -202,16 +201,16 @@ export const editUser = async (req, res) => {
             calle,
             delegacion,
             referencias,
-            updatedAt: new Date(), // Actualiza la fecha de actualización
+            avatar, // Asegúrate de actualizar el campo avatar
+            updatedAt: new Date(),
           },
-          { new: true } // Devuelve el documento actualizado
+          { new: true }
         );
 
         if (!updatedUser) {
           return res.status(404).json({ message: "User not found" });
         }
 
-        // Devolver los datos actualizados del usuario
         return res.json({
           id: updatedUser._id,
           nombre: updatedUser.nombre,
@@ -223,6 +222,7 @@ export const editUser = async (req, res) => {
           calle: updatedUser.calle,
           delegacion: updatedUser.delegacion,
           referencias: updatedUser.referencias,
+          avatar: updatedUser.avatar, // Incluye el avatar en la respuesta
         });
       } catch (error) {
         return res.status(500).json({ message: error.message });
