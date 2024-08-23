@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { setFechaDeEnvio } from "../middlewares/setFechaDeEnvio.js";
 
 const OrderSchema = new mongoose.Schema({
   items: [
@@ -20,6 +21,9 @@ const OrderSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   username_author: { type: String },
 });
+
+// Uso del middleware para ajustar la fecha antes de guardar
+OrderSchema.pre("save", setFechaDeEnvio);
 
 const Order = mongoose.model("Order", OrderSchema);
 export default Order;
