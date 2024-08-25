@@ -12,6 +12,7 @@ import {
   addResponse,
 } from "../controllers/products.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
+import { reviewcheck } from "../middlewares/review.middleware.js";
 
 const router = Router();
 const upload = multer({ dest: "uploads/" });
@@ -62,7 +63,7 @@ router.post("/newproduct", upload.single("image"), async (req, res) => {
 
 router.get("/getproducts", GetProducts);
 router.get("/getproduct", GetProductById);
-router.post("/products/:productId/reviews", auth, addReview);
+router.post("/products/:productId/reviews", auth, reviewcheck, addReview);
 router.post("/products/:productId/questions", auth, addquestion);
 router.post(
   "/products/:productId/questions/:questionId/response",

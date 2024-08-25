@@ -1,12 +1,25 @@
-import Product from "../models/products.model";
-import Order from "../models/order.model";
+import Order from "../models/order.model.js";
 
-export const reviewcheck = async (req, res) => {
-  const { productId } = req.params;
+export const reviewcheck = async (req, res, next) => {
+  const userid = req.user._id;
+  const productid = req.params.productid;
+
   try {
-    const product = await Product.findById(productId);
-    if (!product) {
-      return res.status(404).json({ message: "Producto no encontrado" });
+    const orders = await Order.find({ author: userid });
+
+    const hasPurchased = orders.some((order) =>
+      order.items.some((item) => item.itemId === productid)
+    );
+
+    if (hasPurchased) {
+      return next();
+    } else {
+      return res
+        .status(403)
+        .json({ message: "El usuario no ha comprado este producto." });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error en el middleware de revisión:", error);
+    return res.status(500).json({ message: "Error en el servidor." });
+  }
 };
