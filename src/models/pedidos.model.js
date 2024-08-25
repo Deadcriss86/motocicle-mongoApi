@@ -8,6 +8,7 @@ const PedidoSchema = new mongoose.Schema({
       precio: { type: Number, required: true },
       product_name: { type: String, required: true },
       image: { type: String, required: true },
+      product_stock: { type: Number, required: true },
     },
   ],
   detalles_envio: {
