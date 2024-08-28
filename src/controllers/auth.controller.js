@@ -143,6 +143,7 @@ export const getUserProfile = async (req, res) => {
         // Devolver los datos del usuario
         return res.json({
           id: userFound._id,
+          username: userFound.username,
           nombre: userFound.nombre,
           apellido: userFound.apellido,
           nacionalidad: userFound.nacionalidad,
