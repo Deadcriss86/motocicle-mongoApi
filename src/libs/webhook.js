@@ -5,6 +5,7 @@ import Stripe from "stripe";
 import express from "express";
 import Order from "../models/order.model.js";
 import Product from "../models/products.model.js";
+import Pedido from "../models/pedidos.model.js";
 
 dotenv.config();
 const router = Router();
@@ -52,6 +53,15 @@ router.post(
             console.log("El item de la peticion es:", item.itemId);
             await reduceProductStock(item.itemId, item.cantidad);
           }
+
+          //eliminar carrito
+          Pedido.deleteMany({ author: new mongoose.Types.ObjectId(userId) })
+            .then((result) => {
+              console.log(`${result.deletedCount} documentos eliminados`);
+            })
+            .catch((err) => {
+              console.error("Error al eliminar documentos:", err);
+            });
 
           response
             .status(200)
