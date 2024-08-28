@@ -58,23 +58,12 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: userFound._id });
 
-    res.cookie("token", token, {
-      httpOnly: process.env.NODE_ENV !== "development",
-      secure: true,
-      sameSite: "none",
-    });
-    if (userFound.isAdmin == true) {
-      res.cookie("isadmin", userFound.isAdmin, {
-        sameSite: true,
-        secure: true,
-      });
-    }
-
     res.json({
       id: userFound._id,
       username: userFound.username,
       email: userFound.email,
-      ...(userFound.isAdmin !== undefined && { isAdmin: userFound.isAdmin }),
+      token: token,
+      isadmin: userFound.isAdmin ? userFound.isAdmin : undefined,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
