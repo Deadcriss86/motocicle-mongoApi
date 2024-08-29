@@ -143,6 +143,7 @@ export const getUserProfile = async (req, res) => {
           delegacion: userFound.delegacion,
           referencias: userFound.referencias,
           avatar: userFound.avatar,
+          isAdmin: userFound.isAdmin,
         });
       } catch (error) {
         return res.status(500).json({ message: error.message });
