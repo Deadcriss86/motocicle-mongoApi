@@ -15,7 +15,11 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "https://motoapiv4.vercel.app/",
+    origin: [
+      "https://motoapiv3.vercel.app",
+      "http://localhost:5173",
+      FRONTEND_URL,
+    ], // Añade aquí tu localhost
   })
 );
 
