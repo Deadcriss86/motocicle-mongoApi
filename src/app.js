@@ -18,6 +18,7 @@ app.use(
     origin: [
       "https://motoapiv3.vercel.app",
       "http://localhost:5173",
+      "https://store-motocicle-six.vercel.app/",
       FRONTEND_URL,
     ], // Añade aquí tu localhost
   })
