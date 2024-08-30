@@ -59,6 +59,7 @@ export const login = async (req, res) => {
       email: userFound.email,
       token: token,
       isadmin: userFound.isAdmin ? userFound.isAdmin : undefined,
+      avatar: userFound.avatar,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
