@@ -66,8 +66,9 @@ export const login = async (req, res) => {
 };
 
 export const verifyToken = async (req, res) => {
-  const { token } = req.cookies;
-  if (!token) return res.send(false);
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) return res.send("sin token proporcinado");
 
   jwt.verify(token, TOKEN_SECRET, async (error, user) => {
     if (error) return res.sendStatus(401);
@@ -104,7 +105,8 @@ export const logout = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   try {
-    const { token } = req.cookies;
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
 
     // Verificar si el token existe
     if (!token) {
@@ -163,7 +165,8 @@ export const editUser = async (req, res) => {
       referencias,
       avatar, // Agrega el campo avatar aquí
     } = req.body;
-    const { token } = req.cookies;
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });

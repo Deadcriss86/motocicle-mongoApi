@@ -1,5 +1,5 @@
 export const isAdmin = (req, res, next) => {
-  const isAdmin = req.cookies.isAdmin === "true";
+  const isAdmin = req.user.isAdmin === "true";
 
   if (req.user && isAdmin) {
     next();
