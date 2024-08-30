@@ -15,12 +15,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: [
-      "https://motoapiv3.vercel.app",
-      "http://localhost:5173",
-      "https://store-motocicle-six.vercel.app",
-      FRONTEND_URL,
-    ], // Añade aquí tu localhost
+    origin: "https://store-motocicle-six.vercel.app", // Añade aquí tu localhost
   })
 );
 
