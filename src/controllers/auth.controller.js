@@ -58,6 +58,20 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: userFound._id });
 
+    res.cookie("token", token, {
+      httpOnly: true, // Solo accesible por el servidor
+      secure: true, // Solo se envía a través de HTTPS (asegúrate de que el sitio esté en HTTPS)
+      sameSite: "none",
+    });
+
+    if (userFound.isadmin) {
+      res.cookie("isadmin", true, {
+        httpOnly: true, // Solo accesible por el servidor
+        secure: true, // Solo se envía a través de HTTPS (asegúrate de que el sitio esté en HTTPS)
+        sameSite: "none",
+      });
+    }
+
     res.json({
       id: userFound._id,
       username: userFound.username,
