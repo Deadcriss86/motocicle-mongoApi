@@ -4,6 +4,7 @@ import User from "../models/user.model.js";
 
 export const auth = async (req, res, next) => {
   const token = req.cookies.token;
+  console.log(req.cookies);
 
   if (!token) {
     return res.status(401).json({ message: "Token no proporcionado" });
