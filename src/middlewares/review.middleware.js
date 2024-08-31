@@ -2,7 +2,7 @@ import Order from "../models/order.model.js";
 
 export const reviewcheck = async (req, res, next) => {
   const userid = req.user._id;
-  const productid = req.params.productid;
+  const productid = req.params.productId;
 
   try {
     const orders = await Order.find({ author: userid });
