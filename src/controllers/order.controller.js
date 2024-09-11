@@ -1,5 +1,6 @@
 import Order from "../models/order.model.js";
 import User from "../models/user.model.js";
+import { delivery_notification } from "../libs/nodemailer.js";
 
 // Obtener todas las órdenes
 export const GetAllOrders = async (req, res) => {
@@ -35,6 +36,8 @@ export const UpdateOrderById = async (req, res) => {
       { items, numero_guia, total, paqueteria, fecha_de_envio },
       { new: true } // Esto devuelve la orden actualizada
     );
+    await delivery_notification(updatedOrder.author, paqueteria, numero_guia);
+
     if (!updatedOrder) {
       return res.status(404).json({ message: "Orden no encontrada" });
     }
