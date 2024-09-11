@@ -6,6 +6,7 @@ import express from "express";
 import Order from "../models/order.model.js";
 import Product from "../models/products.model.js";
 import Pedido from "../models/pedidos.model.js";
+import { payment_notification } from "./nodemailer.js";
 
 dotenv.config();
 const router = Router();
@@ -50,7 +51,6 @@ router.post(
 
           // Reducir el stock de cada producto en la orden
           for (const item of data.items) {
-            console.log("El item de la peticion es:", item.itemId);
             await reduceProductStock(item.itemId, item.cantidad);
           }
 
@@ -62,6 +62,14 @@ router.post(
             .catch((err) => {
               console.error("Error al eliminar documentos:", err);
             });
+
+          //Mandar correo
+          await payment_notification(
+            userId,
+            data.orderId,
+            data.items,
+            data.total
+          );
 
           response
             .status(200)
